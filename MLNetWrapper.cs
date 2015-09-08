@@ -171,6 +171,12 @@ namespace MLNetWrapper
         }
 
         /// <summary>
+        /// Whether the network was trained at least once.
+        /// If true, when executing 0 is returned.
+        /// </summary>
+        private bool untrained = true;
+
+        /// <summary>
         /// Name of this net in the current MATLAB workspace.
         /// </summary>
         private string name;
@@ -221,10 +227,6 @@ namespace MLNetWrapper
             );
             this.ProcessFunctions.Add(ProcessingFunctions.REMOVECONSTANTROWS);
             this.ProcessFunctions.Add(ProcessingFunctions.MAPMINMAX);
-
-            //Train a single zero-example in order to be able to use Execute before training
-            wrapper.matlab.Execute("x = zeros(1, " + this.inputLayerSize.ToString() + ")");
-            wrapper.matlab.Execute(name + " = train(" + name + ", x', 0)"); //Configure the network for the number of inputs and a single output
         }
 
 
@@ -241,6 +243,7 @@ namespace MLNetWrapper
             if (inputs.GetLength(0) != outputs.GetLength(0))
                 throw new Exception("Number of inputs doesn't match number of outputs");
             //Execute training
+            untrained = false;
             wrapper.matlab.PutWorkspaceData("x", "base", inputs); //Save inputs to workspace
             wrapper.matlab.PutWorkspaceData("y", "base", outputs); //Save outputs to workspace
             wrapper.matlab.Execute(name + " = train(" + name + ", x', y')"); //Call MATLAB's train function
@@ -256,6 +259,8 @@ namespace MLNetWrapper
             //Checks
             if (input.Length != inputLayerSize)
                 throw new Exception("Input dimensions don't match");
+            if (untrained)
+                return 0;
             //Simulate
             string value;
             wrapper.matlab.PutWorkspaceData("x", "base", input); //Save input to workspace
