@@ -17,5 +17,14 @@ Console.WriteLine(net.Execute(new double[] { 0.1, 0.2 }));
 ```
 
 ### Getting Started
-- Add a reference in your project to *MLApp.dll*, needed to communicate with MATLAB.
+- Add a reference in your project to *MATLAB Application Type Library* in COM Tab in Visual Studio.
 - Add the *MLNetWrapper.cs* file to your project and build.
+
+### Supported Features
+- Different training functions
+- Pre/post-processing function: *mapminmax* and *removeconstantrows*
+- Different transfer functions: *tansig* and *purelin*
+- Change training, validation and test samples ratio
+- Hide MATLAB's training window
+- Set maximum number of epochs
+- Parallel training
