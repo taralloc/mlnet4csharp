@@ -273,10 +273,10 @@ namespace MLNetWrapper
                     //When a new item is added/removed, set the new processing functions for both input and output
                     if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add || e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
                     {
-                        string toexecute = "{";
+                        string toexecute = "{ ";
                         foreach (ProcessingFunctions f in this.ProcessFunctions)
                             toexecute += "'" + ProcessingFunctionToString(f) + "',";
-                        toexecute = toexecute.Remove(toexecute.Length - 1) + "}";
+                        toexecute = toexecute.Remove(toexecute.Length - 1) + " }";
                         wrapper.matlab.Execute(name + ".input.processFcns = " + toexecute);
                         wrapper.matlab.Execute(name + ".output.processFcns = " + toexecute);
                     }
